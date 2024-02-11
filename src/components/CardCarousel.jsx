@@ -5,7 +5,7 @@ import loadImg from "../assets/product-img-loading.jpg"
 
 
 function CardCarousel({ cards, category, heading, link }) {
-  const { dispatch } = useContext(AppContext);
+  const { dispatch, loading } = useContext(AppContext);
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardsContainerRef = useRef(null);
   const carouselCount = 2;
@@ -75,7 +75,7 @@ function CardCarousel({ cards, category, heading, link }) {
                           <div className="carousel-img">
                             {item.url.length > 0 ?
                               <img
-                                src={item.url[0].img ? `../${item.url[0].img}` : loadImg}
+                                src={item.url ? `../${item.url[0].img}` : loadImg}
                                 alt="product-img"
                                 width={"100%"}
                                 height={"100%"}

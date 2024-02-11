@@ -31,6 +31,7 @@ function GLobalState(props) {
       value={{
         dispatch,
         productData: state.data,
+        loading: state.loading,
       }}
     >
       {props.children}
