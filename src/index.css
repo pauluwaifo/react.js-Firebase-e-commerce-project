@@ -1,0 +1,69 @@
+:root {
+  font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI,
+    Helvetica Neue, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  background-color: #f1f1f2;
+}
+.swiper {
+  width: 100%;
+  height: 500px;
+  margin: 0 !important;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  color: rgb(128, 128, 128) !important;
+  font-size: 1.5rem !important;
+  background-color: rgba(164, 164, 164, 0.5);
+padding: 10px 15px;
+  border-radius: 50px;
+}
+.swiper-button-prev:hover:after,
+.swiper-button-next:hover:after {
+  background-color: rgb(171, 165, 165) !important;
+}
+.swiper-vertical > .swiper-pagination-bullets .swiper-pagination-bullet, .swiper-pagination-vertical.swiper-pagination-bullets .swiper-pagination-bullet {
+  display: inline-block;
+  margin: 5px;
+}
+.swiper-vertical > .swiper-pagination-bullets, .swiper-pagination-vertical.swiper-pagination-bullets { 
+ top: 90% !important;
+ left: 0%;
+ right: 0%;
+}
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1195px;
+  }
+}
