@@ -10,77 +10,84 @@ import CategoryCard from "../components/CategoryCard";
 import PercentOff from "../components/PercentOff";
 import CardCarousel from "../components/CardCarousel";
 import Recommendation from "../components/Recommendation";
-import "./Homepage.css"
+import "./Homepage.css";
 function Home() {
-  const { productData} = useContext(AppContext);
+  const { productData, wishlist } = useContext(AppContext);
   const [searchResults, setSearchResults] = useState();
   const [search, setSearch] = useState();
 
   return (
     <div className="body">
-      <div className="container">
+      <div className="container mt-14">
         <div className="row g-3">
           {/* slider */}
           <Slider />
           {/* slider end */}
-          {/* Recommendations */}
-          <Recommendation />
-          {/* Recommendations end*/}
+          {/* product category select */}
+          <CategoryCard />
+          {/* product category select end */}
           {/* product carousel 1 */}
           <CardCarousel
             cards={productData}
             category="apparel"
-            heading="CAROUSEL 1"
-            link="/view"
+            heading="Latest Products"
+            bg="#cfe8ef"
+            border="1.5px solid #cfe8ef"
           />
           {/* product carousel 1 end */}
           {/* product carousel 2 */}
           <CardCarousel
             cards={productData}
             category="fashion"
-            heading="CAROUSEL 2"
-            link="/view"
+            heading="Shoes Spring"
+            bg="#cfe8ef"
+            border="1.5px solid #cfe8ef"
           />
           {/* product carousel 2 end */}
           {/* product banner 1*/}
           <BannerOne />
           {/* product banner 1end*/}
-          {/* product carousel 3 */}
+          {/* UP TO 50% OFF */}
           <CardCarousel
             cards={productData}
-            category="drinkware"
-            heading="CAROUSEL 3"
-            link="/view"
+            category={null}
+            heading="Sneaker Discounts Upto 50% off"
+            bg="#f2f2"
+            border="1.5px solid #f2f2"
           />
-          {/* product carousel 3 end */}
-          {/* product category select */}
-          <CategoryCard />
-          {/* product category select end */}
-          {/* product banner 2*/}
-          <BannerTwo />
-          {/* product banner 2 end*/}
-          {/* product carousel 4 */}
-          <CardCarousel
-            cards={productData}
-            category="office"
-            heading="CAROUSEL 4"
-            link="/view"
-          />
-          {/* product carousel 4 end */}
+          {/* UP TO 50% OFF end */}
+
           {/* product carousel 5 */}
           <CardCarousel
             cards={productData}
-            category="accessories"
-            heading="CAROUSEL 5"
-            link="/view"
+            category="office"
+            heading="Ambient Groceries"
+            bg="#f2f2"
+            border="1.5px solid #f2f2"
           />
-          {/* Top sellers carousel */}
+
+          {/* product banner 2*/}
+          <BannerTwo />
+          {/* product banner 2 end*/}
+          {/* LAUNCH DAY SALES */}
           <CardCarousel
             cards={productData}
-            category="bags"
-            heading="CAROUSEL 6"
-            link="/view"
+            category="accessories"
+            heading="Launch Day Deals"
+            bg="#ce3542"
+            color="white"
           />
+          {/* LAUNCH DAY SALES end */}
+          {/* Top sellers carousel */}
+          {wishlist.length > 0 ? (
+            <CardCarousel
+              cards={wishlist}
+              wishlist = {wishlist && wishlist.length > 0 ? true : false}
+              heading="Products On Your Wishlist"
+              bg="white"
+              border="1.5px solid white"
+            />
+          ) : null}
           {/* Top sellers carousel end*/}
           {/* product carousel 5 end */}
           {/* 50% off banner*/}

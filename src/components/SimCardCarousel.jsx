@@ -1,10 +1,19 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import AppContext from "../contexts/appContext";
-import loadImg from "../assets/product-img-loading.jpg"
+import loadImg from "../assets/product-img-loading.jpg";
+import StarRating from "../components/StarRating";
 
-function SimCardCarousel({ cards, category, heading, link, name }) {
-  const { dispatch } = useContext(AppContext);
+function SimCardCarousel({
+  cards,
+  category,
+  heading,
+  name,
+  setQtyCount,
+  display,
+  wishlist
+}) {
+  const { dispatch, loading } = useContext(AppContext);
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardsContainerRef = useRef(null);
   const carouselCount = 2;
@@ -45,8 +54,12 @@ function SimCardCarousel({ cards, category, heading, link, name }) {
       <div className="p-relative cl-b">
         {/* HEADER */}
         <div className="md-flex">
-          <h6 className="al-l p-0 m-0">{heading}</h6>
-          <Link className="al-r p-0 m-0 v-m" to={link}>
+          <h6 className="al-l px-3 py-1 m-0">{heading}</h6>
+          <Link
+            style={{ display: `${display}` }}
+            className="al-r p-0 m-0 v-m"
+            to={`/${category}`}
+          >
             View more
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -60,21 +73,41 @@ function SimCardCarousel({ cards, category, heading, link, name }) {
             </svg>
           </Link>
         </div>
-        {/* CARD CAROUSEL */}
-        <div className="carousel-container mt-2" ref={cardsContainerRef}>
+         {/* CARD CAROUSEL */}
+         <div
+          style={{
+            background: heading.toLowerCase().includes("launch day")
+              ? `white`
+              : `none`,
+          }}
+          className={`carousel-container py-1 mt-3`}
+          ref={cardsContainerRef}
+        >
           {cards
-            .filter((pro) => pro.category == category && pro.name !== name)
+            .filter((pro) =>
+              pro.category == category
+                ? pro.category == category && pro.name !== name
+                : category == null && pro.discountPrice
+                ? pro
+                : wishlist
+                ? pro
+                : null
+            )
             .slice(0, 13)
             .map((item, i) => {
               return (
-                <section key={i}>
+                <section key={i} onClick={()=>setQtyCount(Number(1))}>
                   {item && (
                     <Link to={`/product_/${item.id}`}>
                       <div className="carousel-card" key={i}>
                         <div className="carousel-img">
                           {item.url.length > 0 ? (
                             <img
-                              src={item.url[0].img ? `../${item.url[0].img}` : loadImg}
+                              src={
+                                !loading && item.url[0].img
+                                  ? `../${item.url[0].img}`
+                                  : loadImg
+                              }
                               alt="product-img"
                               width={"100%"}
                               height={"100%"}
@@ -82,17 +115,75 @@ function SimCardCarousel({ cards, category, heading, link, name }) {
                           ) : null}
                         </div>
                         <div className="carousel-text">
-                          <span className="px-1 fl-b-70 al-l">{item.name}</span>
-                          <span className="px-1 fl-b-30 al-r">
-                            ${item.price}
+                          <StarRating />
+                          {/* ITEM NAME */}
+                          <span className="fl-b-100 al-l">{item.name}</span>
+                          {/* DISCOUNT PRICE */}
+                          <span className="d-block fs-1 al-l fs-1 fw-bold rounded-2 mt-1">
+                            {item.discountPrice && `₦${item.discountPrice}`}
                           </span>
-                          <div className="fl-b-100">
-                            <ion-icon name="star"></ion-icon>
-                            <ion-icon name="star"></ion-icon>
-                            <ion-icon name="star"></ion-icon>
-                            <ion-icon name="star"></ion-icon>
-                            <ion-icon name="star-half"></ion-icon>
-                          </div>
+
+                          {/* ITEM PRICE */}
+                          <span
+                            className={`al-l fw-bold rounded-2 ${
+                              item.discountPrice ? `_dcp` : `fs-1`
+                            }`}
+                          >
+                            {item.variants && item.variants.length > 0 ? (
+                              <>
+                                {(() => {
+                                  const allPrices = item.variants.flatMap(
+                                    (variant) => {
+                                      if (variant.sizes) {
+                                        return variant.sizes.map(
+                                          (size) => size.price
+                                        );
+                                      } else if (variant.price) {
+                                        return [parseFloat(variant.price)];
+                                      }
+                                      return [];
+                                    }
+                                  );
+
+                                  const minPrice = Math.min(...allPrices);
+                                  const maxPrice = Math.max(...allPrices);
+
+                                  return (
+                                    <span>
+                                      {`₦${minPrice.toFixed(
+                                        0
+                                      )} - ₦${maxPrice.toFixed(0)}`}
+                                    </span>
+                                  );
+                                })()}
+                              </>
+                            ) : (
+                              `₦${item.price}`
+                            )}
+                          </span>
+
+                          {/* DISCOUNT PERCENTAGE CALCULATOR */}
+                          {item.discountPrice && (
+                            <span className="bg-primary d-inline-block p-absolute top-0 right-0 m-1 text-white p-1">
+                              {(() => {
+                                if (
+                                  item.price <= 0 ||
+                                  item.discountPrice <= 0 ||
+                                  item.discountPrice >= item.Price
+                                ) {
+                                  console.error("Invalid input values");
+                                  return null;
+                                }
+
+                                const discountAmount =
+                                  item.price - item.discountPrice;
+                                const discountPercentage =
+                                  (discountAmount / item.price) * 100;
+
+                                return `${Math.floor(discountPercentage)}% OFF`;
+                              })()}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </Link>
@@ -122,15 +213,25 @@ function SimCardCarousel({ cards, category, heading, link, name }) {
               </svg>
             </button>
           )}
-          <button
-            onClick={() => {
-              nextCard();
-              scrollCardIntoView();
-            }}
-            className="arrow-button right"
-          >
-            <ion-icon name="ios-arrow-forward"></ion-icon>
-          </button>
+          {cards && cards.length > 6 ? (
+            <button
+              onClick={() => {
+                nextCard();
+                scrollCardIntoView();
+              }}
+              className="arrow-button right"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={"24"}
+                height={"24"}
+                fill="white"
+                viewBox="0 0 512 512"
+              >
+                <path d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z" />
+              </svg>
+            </button>
+          ) : null}
         </div>
       </div>
     </div>

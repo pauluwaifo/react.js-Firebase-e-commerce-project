@@ -1,13 +1,32 @@
 import React, { useReducer, useState, useEffect } from "react";
 import AppContext from "./appContext";
-import { GetProductReducer } from "../reducers/myReducer";
-import { initialState } from "./initialState";
+import {
+  GetProductReducer,
+  CartReducer,
+  ShippingReducer,
+  WhishListReducer,
+} from "../reducers/myReducer";
+
+import {
+  initialState,
+  initialCartState,
+  initialShippingState,
+  initialWishListState,
+} from "./initialState";
 import { FETCH_ERROR, FETCH_SUCCESS } from "../constants/constant";
 import axios from "axios";
 
 function GLobalState(props) {
   const [state, dispatch] = useReducer(GetProductReducer, initialState);
- 
+  const [cartState, dispatchCart] = useReducer(CartReducer, initialCartState);
+  const [shippingState, dispatchShipping] = useReducer(
+    ShippingReducer,
+    initialShippingState
+  );
+  const [wishListState, dispatchWishlist] = useReducer(
+    WhishListReducer,
+    initialWishListState
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,12 +45,24 @@ function GLobalState(props) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartState.cart));
+    localStorage.setItem("shipping", JSON.stringify(shippingState.shipping));
+    localStorage.setItem("wishlist", JSON.stringify(wishListState.wishlist));
+  }, [cartState.cart, shippingState.shipping, wishListState.wishlist]);
+
   return (
     <AppContext.Provider
       value={{
         dispatch,
         productData: state.data,
         loading: state.loading,
+        cart: cartState.cart,
+        dispatchCart,
+        shipping: shippingState.shipping,
+        dispatchShipping,
+        dispatchWishlist,
+        wishlist: wishListState.wishlist
       }}
     >
       {props.children}

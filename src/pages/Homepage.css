@@ -1,5 +1,5 @@
 .body {
-    background-image: linear-gradient(5deg, rgba(232, 232, 232, 1) 70%, rgba(51, 51, 51, 0.2) 100%), url('../assets/background-4.jpg') ;
+    background-image: linear-gradient(5deg, rgba(232, 232, 232, 1) 70%, rgba(51, 51, 51, .2) 100%), url('../assets/background-4.jpg') ;
     background-repeat: repeat;
     background-size: contain;
     background-position: center center;

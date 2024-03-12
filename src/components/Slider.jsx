@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
+import smallBanner1 from "/banner_images/img_3.jpg"
+import smallBanner2 from "/banner_images/img-2.jpg"
+
 
 function Slider() {
   const images = [
     "banner_images/slide_1.jpg",
     "banner_images/slide_2.jpg",
-    "banner_images/slide_5.png",
-    "banner_images/slide_6.png",
-
-
+    "banner_images/slide_3.jpg",
+    "banner_images/slide_4.jpg",
   ];
+
   const [currentImage, setCurrentImage] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -35,8 +37,10 @@ function Slider() {
   };
 
   return (
-    <div className="col-12 mt-11">
-      <div
+    <div className="col-12">
+      <div className="row g-3">
+        <div className="col-lg-9 col-sm-12">
+        <div
         className="image-slider shadow"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
@@ -47,7 +51,7 @@ function Slider() {
             src={imageUrl}
             alt={`Slide ${index + 1}`}
             width={"100%"}
-            className={`i-m-s rounded-1 ${
+            className={`i-m-s ${
               index === currentImage ? "visible" : "hidden"
             }`}
           />
@@ -76,6 +80,23 @@ function Slider() {
           </button>
         </div>
       </div>
+        </div>
+        <div className="col-3">
+          <div className="row g-3">
+            <div className="col-12">
+              <div>
+                <img src={smallBanner1} alt="banner" width={"100%"} height={"191"} />
+              </div>
+            </div>
+            <div className="col-12">
+            <div>
+                <img src={smallBanner2} alt="banner" width={"100%"} height={"191"}/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     
     </div>
   );
 }
